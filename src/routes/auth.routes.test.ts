@@ -1,7 +1,9 @@
-import "jasmine";
+import "mocha";
 import * as request from "supertest";
 import app from "../app";
+import { expect } from "chai";
 import { config } from "../config/app-config";
+import { connector } from "../connectors/mongoose.connector";
 import { User } from "../models/user.model";
 import {
   mockUser,
@@ -9,30 +11,30 @@ import {
   mockUserWithWrongPassword,
   mockUserWithWrongEmail
 } from "../mocks/users.mock";
-import { connector } from "../connectors/mongoose.connector";
 
 describe("/login", () => {
-  beforeAll(done => {
+  before(done => {
     connector
       .openConnection(config.testDb)
-      .then(done)
-      .catch(done);
+      .then(() => done())
+      .catch(() => done());
   });
 
-  beforeAll(done => {
+  before(done => {
     const user = new User(mockUserWithHashedPassword);
     // populate db for testing env
     user
       .save()
-      .then(done)
+      .then(() => done())
       .catch(err => {
         console.log(err, "error while preparing test db");
         done();
       });
   });
 
-  afterAll(() => {
+  after((done) => {
     connector.dropDb("users");
+    done();
   });
 
   it("should login user", done => {
@@ -40,8 +42,8 @@ describe("/login", () => {
       .post(`/login`)
       .send(mockUser)
       .then(resp => {
-        expect(resp.status).toEqual(200);
-        expect(resp.body.msg).toBeTruthy();
+        expect(resp.status).to.equal(200);
+        expect(resp.body).to.have.property("msg");
         done();
       })
       .catch(() => done());
@@ -52,8 +54,8 @@ describe("/login", () => {
       .post(`/login`)
       .send(mockUserWithWrongPassword)
       .then(resp => {
-        expect(resp.status).toEqual(401);
-        expect(resp.body.msg).toEqual("wrong login or password");
+        expect(resp.status).to.equal(401);
+        expect(resp.body.msg).to.equal("wrong login or password");
         done();
       })
       .catch(() => done());
@@ -64,20 +66,20 @@ describe("/login", () => {
       .post(`/login`)
       .send(mockUserWithWrongEmail)
       .then(resp => {
-        expect(resp.status).toEqual(401);
-        expect(resp.body.msg).toEqual("wrong login or password");
+        expect(resp.status).to.equal(401);
+        expect(resp.body.msg).to.equal("wrong login or password");
         done();
       })
       .catch(() => done());
   });
 
   it("should return response with cookie when user is correctly validated", done => {
-      request(app)
+    request(app)
       .post(`/login`)
       .send(mockUser)
       .then(resp => {
-        expect(resp.header["set-cookie"]).toBeTruthy();
-        expect(resp.header["set-cookie"].length).toEqual(1);
+        expect(resp.header).to.have.property("set-cookie");
+        expect(resp.header["set-cookie"].length).to.equal(1);
         done();
       })
       .catch(() => done());
@@ -88,7 +90,7 @@ describe("/login", () => {
       .post(`/login`)
       .send(mockUserWithWrongEmail)
       .then(resp => {
-        expect(resp.header["set-cookie"]).toBeFalsy();
+        expect(resp.header["set-cookie"]).not.to.have.property("set-cookie");
         done();
       })
       .catch(() => done());
