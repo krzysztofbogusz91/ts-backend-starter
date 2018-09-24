@@ -1,3 +1,2 @@
-# The Game Rental Applicaton
-
-The App will allow to rent board games.
+# TS-BACKEND-STARETER 
+## nodejs express typescript jasmine
