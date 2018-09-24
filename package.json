@@ -5,11 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "nodemon node_modules/jasmine/bin/jasmine --config=jasmine.json",
+    "test": "mocha -r ts-node/register src/**/*.test.ts",
     "dev": "nodemon ./src/server.ts",
     "start": "nodemon ./dist/server.js",
-    "prod": "npm run build && npm run start",
-    "test-watch": "nodemon --watch 'npm run test'"
+    "prod": "npm run build && npm run start"
   },
   "author": "",
   "license": "ISC",
@@ -36,10 +35,11 @@
     "typescript": "^3.0.3"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.8",
+    "@types/chai": "^4.1.5",
+    "@types/mocha": "^5.2.5",
     "@types/supertest": "^2.0.5",
-    "jasmine": "^3.2.0",
-    "jasmine-spec-reporter": "^4.2.1",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
     "node-mocks-http": "^1.7.0",
     "nodemon": "^1.18.4",
     "supertest": "^3.1.0"
