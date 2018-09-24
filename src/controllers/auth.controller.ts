@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as passport from "passport";
 
-class AuthController {
+export class AuthController {
   public onUserLogin(req: Request, res: Response, next: NextFunction): void {
     passport.authenticate("local", (err, user) => {
       if (err) return next(err);

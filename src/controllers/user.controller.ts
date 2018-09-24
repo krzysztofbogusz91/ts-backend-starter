@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import { UserService } from "./../services/user.service";
 
-class UserController {
+export class UserController {
   constructor(private userService: UserService) {}
 
   public createUser(req: Request, res: Response): Promise<Response> {
