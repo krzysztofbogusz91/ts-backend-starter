@@ -1,18 +1,15 @@
-import { Request, Response } from 'express';
-import { User } from '../models/user.model';
-import { UserService } from './../services/user.service';
-import { IUser } from './../models/user.interface';
+import { Request, Response } from "express";
+import { User } from "../models/user.model";
+import { UserService } from "./../services/user.service";
 
 class UserController {
   constructor(private userService: UserService) {}
 
-  public createUser(req, res): Promise<IUser> {
-    const newUser = new User(req.body);
-
+  public createUser(req: Request, res: Response): Promise<Response> {
     return this.userService
-      .create(newUser)
-      .then((user: IUser) => res.status(200).send({ msg: 'user created' }))
-      .catch(err => res.status(500).send({ msg: 'failed to create user' }));
+      .create(new User(req.body))
+      .then(() => res.status(200).send({ msg: "user created" }))
+      .catch(() => res.status(500).send({ msg: "failed to create user" }));
   }
 }
 const service = new UserService();
