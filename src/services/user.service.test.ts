@@ -23,7 +23,7 @@ describe("User service", () => {
       .then(() => done())
       .catch(() => done());
 
-    expect(spyHashSync.calledOnce).to.equal(true);
+    expect(spyHashSync.called).to.equal(true);
   });
 
   it("should save user to database", done => {
