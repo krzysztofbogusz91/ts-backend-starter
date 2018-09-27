@@ -19,7 +19,7 @@ class App {
   private loadRoutes(): void {
     // Routes
     this.app.use("/user", userRouter);
-    this.app.use("/login", authRouter);
+    this.app.use("/auth", authRouter);
     this.app.use("/games", gamesRouter);
   }
 
@@ -32,7 +32,7 @@ class App {
     // set up session
     this.app.use(
       session({
-        secret: "secret", 
+        secret: "secret",
         resave: false,
         saveUninitialized: false
       })
