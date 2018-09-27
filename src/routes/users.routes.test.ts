@@ -42,7 +42,7 @@ describe("/user", () => {
 
   it("should return error msg when request body is broken", done => {
     const server = app.listen(3001);
-    request(app)
+    request(server)
       .post(`/user`)
       .send(invalidUser)
       .end((err, resp) => {

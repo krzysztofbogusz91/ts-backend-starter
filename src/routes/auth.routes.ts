@@ -8,7 +8,7 @@ router.post("/login", controller.onUserLogin.bind(controller));
 router.get("/logout", (req, res) => {
   req.session.destroy(err => {
     res.clearCookie("connect.sid");
-    res.redirect("/games");
+    res.status(200).send({ msg: "user is logout" });
   });
 });
 

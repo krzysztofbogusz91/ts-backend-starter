@@ -12,7 +12,7 @@ import {
   mockUserWithWrongEmail
 } from "../mocks/users.mock";
 
-describe("/login", () => {
+describe("/auth", () => {
   before(done => {
     connector
       .openConnection(config.testDb)
@@ -47,60 +47,71 @@ describe("/login", () => {
 
   it("should login user", done => {
     request(app)
-      .post(`/login`)
+      .post(`/auth/login`)
       .send(mockUser)
-      .then(resp => {
+      .end((err, resp) => {
+        if (err) return done(err);
         expect(resp.status).to.equal(200);
         expect(resp.body).to.have.property("msg");
         done();
-      })
-      .catch(() => done());
+      });
   });
 
   it("should prevent to login when wrong password is passed", done => {
     request(app)
-      .post(`/login`)
+      .post(`/auth/login`)
       .send(mockUserWithWrongPassword)
-      .then(resp => {
+      .end((err, resp) => {
+        if (err) return done(err);
         expect(resp.status).to.equal(401);
         expect(resp.body.msg).to.equal("wrong login or password");
         done();
-      })
-      .catch(() => done());
+      });
   });
 
   it("should prevent to login when wrong credentials are passed", done => {
     request(app)
-      .post(`/login`)
+      .post(`/auth/login`)
       .send(mockUserWithWrongEmail)
-      .then(resp => {
+      .end((err, resp) => {
+        if (err) return done(err);
         expect(resp.status).to.equal(401);
         expect(resp.body.msg).to.equal("wrong login or password");
         done();
-      })
-      .catch(() => done());
+      });
   });
 
   it("should return response with cookie when user is correctly validated", done => {
     request(app)
-      .post(`/login`)
+      .post(`/auth/login`)
       .send(mockUser)
-      .then(resp => {
+      .end((err, resp) => {
+        if (err) return done(err);
         expect(resp.header).to.have.property("set-cookie");
         expect(resp.header["set-cookie"].length).to.equal(1);
         done();
-      })
-      .catch(() => done());
+      });
   });
 
   it("should return response without cookie when user is not validated", done => {
     request(app)
-      .post(`/login`)
+      .post(`/auth/login`)
       .send(mockUserWithWrongEmail)
-      .then(resp => {
-        expect(resp.header["set-cookie"]).not.to.have.property("set-cookie");
+      .end((err, resp) => {
+        if (err) return done(err);
+        expect(resp.header).not.to.have.property("set-cookie");
         done();
-      })
-      .catch(() => done());
+      });
+  });
+
+  it("should logout user and clear session", done => {
+    request(app)
+      .get(`/auth/logout`)
+      .end((err, resp) => {
+        if (err) return done(err);
+        expect(resp.status).to.equal(200);
+        expect(resp.body.msg).to.be.ok;
+        done();
+      });
   });
 });
