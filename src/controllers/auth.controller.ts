@@ -10,9 +10,12 @@ export class AuthController {
       if (!user) {
         return res.status(401).send({ msg: "wrong login or password" });
       }
-      return res
-        .status(200)
-        .send({ msg: `user ${user._id} successfully login` });
+      req.logIn(user, errLog => {
+        if (errLog) return next(errLog);
+        return res
+          .status(200)
+          .send({ msg: `user ${user._id} successfully login` });
+      });
     })(req, res, next);
   }
 }
