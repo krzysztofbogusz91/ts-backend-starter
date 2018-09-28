@@ -7,7 +7,7 @@
     "build": "tsc",
     "test": "mocha -r ts-node/register src/**/*.test.ts",
     "dev": "nodemon ./src/server.ts",
-    "start": "nodemon ./dist/server.js",
+    "start": "node ./dist/server.js",
     "prod": "npm run build && npm run start"
   },
   "author": "",
@@ -21,7 +21,7 @@
     "@types/passport": "^0.4.6",
     "@types/passport-http-bearer": "^1.0.33",
     "@types/passport-local": "^1.0.33",
-    "bcrypt": "^3.0.0",
+    "bcrypt": "3.0.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
