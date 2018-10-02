@@ -1,7 +1,7 @@
-import * as bcrypt from "bcrypt";
-import { DocumentQuery } from "mongoose";
-import { IUser } from "../models/user.interface";
-import { User } from "../models/user.model";
+import * as bcrypt from 'bcrypt';
+import { DocumentQuery } from 'mongoose';
+import { IUser } from '../models/user.interface';
+import { User } from '../models/user.model';
 
 export class UserService {
   public create(user): Promise<IUser> {
